@@ -12,5 +12,7 @@ public class Player {
         BufferedImage orangePlayer = ss.grabSprite(0, 128, 16, 16);
     }
 
+    private void walk(){
 
+    }
 }

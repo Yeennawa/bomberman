@@ -10,9 +10,10 @@ public class GameFrame extends JFrame {
         this.setTitle("Bomber man");
         this.setResizable(false);
         Menu menu = new Menu();
+        GamePanel panel = new GamePanel();
+        GameLoop loop = new GameLoop(panel);
         this.add(menu);
         this.pack();
-
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
