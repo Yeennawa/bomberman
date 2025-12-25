@@ -9,13 +9,21 @@ public class GameFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Bomber man");
         this.setResizable(false);
-        Menu menu = new Menu();
-        GamePanel panel = new GamePanel();
-        GameLoop loop = new GameLoop(panel);
-        this.add(menu);
+        this.add(new Menu(this));
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public void startGame(){
+        this.getContentPane().removeAll();
+        GamePanel panel = new GamePanel();
+        this.add(panel);
+        this.pack();
+        this.revalidate();
+        panel.requestFocus();
+        GameLoop loop = new GameLoop(panel);
+        loop.start();
     }
 }
 

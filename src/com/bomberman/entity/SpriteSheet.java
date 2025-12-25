@@ -10,8 +10,9 @@ public class SpriteSheet {
 
     public SpriteSheet(String path) {
         try {
-            sheet = ImageIO.read(new File("images/" + path));
+            sheet = ImageIO.read(new File("src/images/" + path));
         } catch (IOException e) {
+            System.out.println("หาไฟล์ภาพไม่เจอ! เช็ค Path อีกทีนะ");
             e.printStackTrace();
         }
     }
