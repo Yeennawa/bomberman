@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameLoop extends JPanel implements ActionListener{
-    private Timer timer;
-    private GamePanel panel;
+    final private Timer timer;
+    final private GamePanel panel;
 
     public GameLoop(GamePanel panel) {
         this.panel = panel;

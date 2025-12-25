@@ -11,7 +11,7 @@ public class Menu extends JPanel {
     private JButton startButton() {
         JButton startButton = new JButton("START GAME");
         startButton.addActionListener(e -> {
-            System.out.println("เริ่มเกม!");
+            GameLoop gameLoop = new GameLoop(new GamePanel());
         });
         startButton.setPreferredSize(new Dimension(200, 50));
 
