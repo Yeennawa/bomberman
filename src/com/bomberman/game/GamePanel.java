@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel implements ActionListener{
     private int x=0,y=0;
@@ -21,8 +20,12 @@ public class GamePanel extends JPanel implements ActionListener{
     public static final int ROWS = 13;
     public GamePanel(){
         map = new GameMap();
-        player = new Player(48,48,speed,500);
         this.player=player;
+        player = new Player(
+                1 * TILE_SIZE,
+                1 * TILE_SIZE,
+                speed
+        );
         this.keyH = player.getKeyH();
         setFocusable(true);
         addKeyListener(keyH);
@@ -30,6 +33,7 @@ public class GamePanel extends JPanel implements ActionListener{
                 TILE_SIZE * COLS,
                 TILE_SIZE * ROWS
         ));
+        new Timer(16, this).start();
         setFocusable(true);
     }
 
@@ -39,29 +43,33 @@ public class GamePanel extends JPanel implements ActionListener{
         Graphics2D g2d = (Graphics2D) g;
 
         map.draw(g2d);
-        BufferedImage img = player.getSprite(spriteIndex);
-        if (img != null) {
-            player.draw(g2d, img);
-        }
+        g2d.drawImage(
+                player.getCurrentImage(),
+                player.getX(),
+                player.getY(),
+                TILE_SIZE,
+                TILE_SIZE,
+                null
+        );
     }
 
     public void updateGame() {
         int dx = 0;
         int dy = 0;
 
-        if (keyH.upPressed) {
+        if (keyH.up) {
             dy = -speed;
             spriteIndex = 3;
         }
-        else if (keyH.downPressed) {
+        else if (keyH.down) {
             dy = speed;
             spriteIndex = 0;
         }
-        else if (keyH.leftPressed) {
+        else if (keyH.left) {
             dx = -speed;
             spriteIndex = 1;
         }
-        else if (keyH.rightPressed) {
+        else if (keyH.right) {
             dx = speed;
             spriteIndex = 2;
         }
@@ -73,7 +81,8 @@ public class GamePanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        updateGame();
+        player.update(map);
         repaint();
     }
+
 }

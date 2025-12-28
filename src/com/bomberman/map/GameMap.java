@@ -1,13 +1,15 @@
 package com.bomberman.map;
 
 import com.bomberman.entity.SpriteSheet;
+import com.bomberman.game.GamePanel;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class GameMap {
     private BufferedImage grass;
     private BufferedImage blox;
-    public final int tileSize = 48;
+    public final int tileSize = GamePanel.TILE_SIZE;
 
     public int[][] mapData = {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -26,8 +28,8 @@ public class GameMap {
     };
     public GameMap() {
         SpriteSheet ss = new SpriteSheet("bomb_party_v4.png");
-        grass = ss.grabSprite(64, 48, 15, 15);
-        blox = ss.grabSprite(48, 0, 15, 15);
+        grass = ss.grabSprite(16, 208, 16, 16);
+        blox = ss.grabSprite(0, 0, 16, 16);
     }
     public boolean isBlocked(int col, int row) {
 
@@ -46,4 +48,7 @@ public class GameMap {
                 g2d.drawImage(img, col * tileSize, row * tileSize, tileSize, tileSize, null);
             }
         }
-}}
+    }
+
+
+}

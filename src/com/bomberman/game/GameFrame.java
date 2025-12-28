@@ -22,8 +22,6 @@ public class GameFrame extends JFrame {
         this.pack();
         this.revalidate();
         panel.requestFocus();
-        GameLoop loop = new GameLoop(panel);
-        loop.start();
     }
 }
 
