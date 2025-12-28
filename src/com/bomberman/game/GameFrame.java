@@ -11,6 +11,7 @@ public class GameFrame extends JFrame {
         this.setResizable(false);
         this.add(new Menu(this));
         this.pack();
+        GameLoop gameLooploop = new GameLoop(panel);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
