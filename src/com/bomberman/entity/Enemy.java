@@ -20,12 +20,12 @@ public class Enemy extends Entity{
         super(x, y, speed);
         ss = new SpriteSheet("bomb_party_v4.png");
 
-        downImage  = ss.grabSprite(0, 271, 16, 16);
-        leftImage  = ss.grabSprite(16, 271, 16, 16);
-        rightImage = ss.grabSprite(32, 271, 16, 16);
-        upImage    = ss.grabSprite(48, 271, 16, 16);
+        downImage  = ss.grabSprite(1, 256, 16, 16);
+        rightImage  = ss.grabSprite(48, 256, 16, 16);
+        leftImage = ss.grabSprite(32, 256, 16, 16);
+        upImage    = ss.grabSprite(1, 256, 16, 16);
 
-        currentImage = downImage;
+        currentImage = ss.grabSprite(17, 256, 16, 16);
     }
     public void draw(Graphics2D g2d) {
         if (currentImage != null) {

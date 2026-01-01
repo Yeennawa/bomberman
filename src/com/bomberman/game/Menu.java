@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Menu extends JPanel {
-    GamePanel panel;
     GameFrame frame;
     public Menu(GameFrame frame) {
         this.frame = frame;

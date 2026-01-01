@@ -1,7 +1,5 @@
 package com.bomberman.game;
 import javax.swing.*;
-;
-
 public class GameFrame extends JFrame {
 
 
@@ -11,7 +9,6 @@ public class GameFrame extends JFrame {
         this.setResizable(false);
         this.add(new Menu(this));
         this.pack();
-        GameLoop gameLooploop = new GameLoop(panel);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }

@@ -21,12 +21,12 @@ public class Player extends Entity {
         this.keyH=keyH;
         ss = new SpriteSheet("bomb_party_v4.png");
 
-        downImage  = ss.grabSprite(0, 271, 15, 15);
-        rightImage  = ss.grabSprite(48, 271, 15, 15);
-        leftImage = ss.grabSprite(32, 271, 15, 15);
-        upImage    = ss.grabSprite(0, 271, 15, 15);
+        downImage  = ss.grabSprite(1, 272, 15, 15);
+        rightImage  = ss.grabSprite(48, 272, 15, 15);
+        leftImage = ss.grabSprite(32, 272, 15, 15);
+        upImage    = ss.grabSprite(1, 272, 15, 15);
 
-        currentImage = ss.grabSprite(15, 271, 15, 15);
+        currentImage = ss.grabSprite(17, 272, 15, 15);
     }
     public void draw(Graphics2D g2d) {
         if (currentImage != null) {

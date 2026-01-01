@@ -13,16 +13,13 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements ActionListener {
     private GameFrame frame;
-    private int x = 0, y = 0;
     private int speed = 2;
     private int spriteIndex = 0;
     Player player;
     Keylistener keyH;
     GameMap map;
-    Enemy enemy;
-    Bomb bomb;
     ArrayList<Bomb> bombs = new ArrayList<>();
-    ArrayList<Enemy> enemies = new ArrayList<>();
+    ArrayList<Enemy> enemies ;
     public static final int TILE_SIZE = 48;
     public static final int COLS = 13;
     public static final int ROWS = 13;
@@ -30,8 +27,6 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public GamePanel(GameFrame frame) {
         this.frame = frame;
-        enemies.add(new Enemy(5 * TILE_SIZE, 5 * TILE_SIZE, speed));
-        enemies.add(new Enemy(7 * TILE_SIZE, 5 * TILE_SIZE, speed));
         map = new GameMap();
         Keylistener keyH = new Keylistener();
         player = new Player(
@@ -41,6 +36,8 @@ public class GamePanel extends JPanel implements ActionListener {
                 keyH
         );
         ArrayList<Bomb> bombs = new ArrayList<>();
+        enemies = new ArrayList<>();
+        spawnEnemies(3);
 
         this.keyH = player.getKeyH();
         setFocusable(true);
@@ -51,6 +48,24 @@ public class GamePanel extends JPanel implements ActionListener {
         ));
         new Timer(16, this).start();
         setFocusable(true);
+    }
+    private void spawnEnemies(int count) {
+        while (enemies.size() < count) {
+            int col = (int)(Math.random() * GamePanel.COLS);
+            int row = (int)(Math.random() * GamePanel.ROWS);
+
+            if (map.getTile(row, col) != 0) continue;
+
+
+            if (Math.abs(col - player.getTileX()) <= 2 &&
+                    Math.abs(row - player.getTileY()) <= 2) continue;
+
+            enemies.add(
+                    new Enemy(col * GamePanel.TILE_SIZE,
+                            row * GamePanel.TILE_SIZE,
+                            2)
+            );
+        }
     }
 
     @Override
@@ -79,7 +94,7 @@ public class GamePanel extends JPanel implements ActionListener {
         int bombX = ((player.getX() + TILE_SIZE / 2) / TILE_SIZE) * TILE_SIZE;
         int bombY = ((player.getY() + TILE_SIZE / 2) / TILE_SIZE) * TILE_SIZE;
         if (keyH.boom && !bombPressed) {
-            bombs.add(new Bomb(bombX, bombY));
+            bombs.add(new Bomb(bombX, bombY, map));
             bombPressed = true;
 
         }
@@ -125,8 +140,9 @@ public class GamePanel extends JPanel implements ActionListener {
             if (!enemy.isDead()) {
                 enemy.update(map);
             }
-            repaint();
+
         }
+        repaint();
     }
 
     private void checkPlayerEnemyCollision() {
