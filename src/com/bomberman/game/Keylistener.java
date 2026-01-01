@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class Keylistener implements KeyListener {
 
-    public boolean up, down, left, right;
+    public boolean up, down, left, right, boom;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -15,7 +15,7 @@ public class Keylistener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-
+        if (code == KeyEvent.VK_SPACE) boom = true;
         if (code == KeyEvent.VK_W) up = true;
         if (code == KeyEvent.VK_S) down = true;
         if (code == KeyEvent.VK_A) left = true;
@@ -25,7 +25,7 @@ public class Keylistener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-
+        if (code == KeyEvent.VK_SPACE) boom = false;
         if (code == KeyEvent.VK_W) up = false;
         if (code == KeyEvent.VK_S) down = false;
         if (code == KeyEvent.VK_A) left = false;

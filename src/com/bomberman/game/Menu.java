@@ -10,15 +10,6 @@ public class Menu extends JPanel {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(500, 500));
 
-        JButton startBtn = startButton();
-        startBtn.setBounds(150, 350, 200, 40);
-
-        JButton exitBtn = exitButton();
-        exitBtn.setBounds(150, 400, 200, 40);
-
-        this.add(startBtn);
-        this.add(exitBtn);
-
         JLabel bg = background();
         bg.setBounds(0, 0, 500, 500);
         this.add(bg);

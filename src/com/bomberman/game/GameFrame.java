@@ -14,10 +14,18 @@ public class GameFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
+    public void showMenu() {
+        getContentPane().removeAll();
+        Menu menu = new Menu(this);
+        this.add(menu);
+        this.pack();
+        revalidate();
+        repaint();
+    }
 
     public void startGame(){
         this.getContentPane().removeAll();
-        GamePanel panel = new GamePanel();
+        GamePanel panel = new GamePanel(this);
         this.add(panel);
         this.pack();
         this.revalidate();

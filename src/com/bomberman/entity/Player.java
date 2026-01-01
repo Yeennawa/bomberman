@@ -9,26 +9,24 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends Entity {
-    private final Keylistener keyH;
+    private  Keylistener keyH;
     private final SpriteSheet ss;
     private BufferedImage upImage, downImage, leftImage, rightImage;
     private BufferedImage currentImage;
-    private int dx,dy;
-    int[][] tiles;
     int width  = GamePanel.TILE_SIZE;
-    int height = GamePanel.TILE_SIZE;
-    ArrayList<Image> playerImages= new ArrayList<>();
-    public Player(int x, int y, int speed) {
+    int height = GamePanel.TILE_SIZE;;
+
+    public Player(int x, int y, int speed,Keylistener keyH) {
         super(x, y, speed);
-        keyH = new Keylistener();
+        this.keyH=keyH;
         ss = new SpriteSheet("bomb_party_v4.png");
 
-        downImage  = ss.grabSprite(0, 271, 16, 16);
-        leftImage  = ss.grabSprite(16, 271, 16, 16);
-        rightImage = ss.grabSprite(32, 271, 16, 16);
-        upImage    = ss.grabSprite(48, 271, 16, 16);
+        downImage  = ss.grabSprite(0, 271, 15, 15);
+        rightImage  = ss.grabSprite(48, 271, 15, 15);
+        leftImage = ss.grabSprite(32, 271, 15, 15);
+        upImage    = ss.grabSprite(0, 271, 15, 15);
 
-        currentImage = downImage;
+        currentImage = ss.grabSprite(15, 271, 15, 15);
     }
     public void draw(Graphics2D g2d) {
         if (currentImage != null) {
@@ -85,9 +83,9 @@ public class Player extends Entity {
             int nextX = x + dx;
 
             int left   = nextX + offset;
-            int right  = nextX + width - offset - 1;
+            int right  = nextX + width - offset ;
             int top    = y + offset;
-            int bottom = y + height - offset - 1;
+            int bottom = y + height - offset ;
 
             int leftCol   = left  / map.tileSize;
             int rightCol  = right / map.tileSize;
@@ -107,9 +105,9 @@ public class Player extends Entity {
             int nextY = y + dy;
 
             int left   = x + offset;
-            int right  = x + width - offset - 1;
+            int right  = x + width - offset ;
             int top    = nextY + offset;
-            int bottom = nextY + height - offset - 1;
+            int bottom = nextY + height - offset ;
 
             int leftCol   = left  / map.tileSize;
             int rightCol  = right / map.tileSize;
@@ -126,8 +124,14 @@ public class Player extends Entity {
         }
     }
 
-    private int snapToGrid(int value, int tileSize) {
-        return (value / tileSize) * tileSize + (tileSize - height) / 2;
+    private boolean dead = false;
+
+    public void die() {
+        dead = true;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }
 

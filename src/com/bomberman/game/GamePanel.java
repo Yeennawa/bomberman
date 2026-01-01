@@ -1,5 +1,7 @@
 package com.bomberman.game;
 
+import com.bomberman.entity.Bomb;
+import com.bomberman.entity.Enemy;
 import com.bomberman.entity.Player;
 import com.bomberman.map.GameMap;
 
@@ -7,25 +9,39 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class GamePanel extends JPanel implements ActionListener{
-    private int x=0,y=0;
-    private int speed=2;
+public class GamePanel extends JPanel implements ActionListener {
+    private GameFrame frame;
+    private int x = 0, y = 0;
+    private int speed = 2;
     private int spriteIndex = 0;
     Player player;
     Keylistener keyH;
     GameMap map;
+    Enemy enemy;
+    Bomb bomb;
+    ArrayList<Bomb> bombs = new ArrayList<>();
+    ArrayList<Enemy> enemies = new ArrayList<>();
     public static final int TILE_SIZE = 48;
     public static final int COLS = 13;
     public static final int ROWS = 13;
-    public GamePanel(){
+    boolean bombPressed = false;
+
+    public GamePanel(GameFrame frame) {
+        this.frame = frame;
+        enemies.add(new Enemy(5 * TILE_SIZE, 5 * TILE_SIZE, speed));
+        enemies.add(new Enemy(7 * TILE_SIZE, 5 * TILE_SIZE, speed));
         map = new GameMap();
-        this.player=player;
+        Keylistener keyH = new Keylistener();
         player = new Player(
                 1 * TILE_SIZE,
                 1 * TILE_SIZE,
-                speed
+                speed,
+                keyH
         );
+        ArrayList<Bomb> bombs = new ArrayList<>();
+
         this.keyH = player.getKeyH();
         setFocusable(true);
         addKeyListener(keyH);
@@ -43,33 +59,51 @@ public class GamePanel extends JPanel implements ActionListener{
         Graphics2D g2d = (Graphics2D) g;
 
         map.draw(g2d);
-        g2d.drawImage(
-                player.getCurrentImage(),
-                player.getX(),
-                player.getY(),
-                TILE_SIZE,
-                TILE_SIZE,
-                null
-        );
+        if (!player.isDead()) {
+            player.draw(g2d);
+        }
+        for (Enemy e : enemies) {
+            if (!e.isDead()) {
+                e.draw(g2d);
+            }
+        }
+
+        for (Bomb b : bombs) {
+            b.draw(g2d);
+        }
     }
 
     public void updateGame() {
         int dx = 0;
         int dy = 0;
+        int bombX = ((player.getX() + TILE_SIZE / 2) / TILE_SIZE) * TILE_SIZE;
+        int bombY = ((player.getY() + TILE_SIZE / 2) / TILE_SIZE) * TILE_SIZE;
+        if (keyH.boom && !bombPressed) {
+            bombs.add(new Bomb(bombX, bombY));
+            bombPressed = true;
+
+        }
+
+        if (!keyH.boom) {
+            bombPressed = false;
+        }
+        for (int i = bombs.size() - 1; i >= 0; i--) {
+            bombs.get(i).update(enemies, map, player);
+            if (bombs.get(i).isDead()) {
+                bombs.remove(i);
+            }
+        }
 
         if (keyH.up) {
             dy = -speed;
             spriteIndex = 3;
-        }
-        else if (keyH.down) {
+        } else if (keyH.down) {
             dy = speed;
             spriteIndex = 0;
-        }
-        else if (keyH.left) {
+        } else if (keyH.left) {
             dx = -speed;
             spriteIndex = 1;
-        }
-        else if (keyH.right) {
+        } else if (keyH.right) {
             dx = speed;
             spriteIndex = 2;
         }
@@ -81,8 +115,40 @@ public class GamePanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        player.update(map);
-        repaint();
+        updateGame();
+        checkPlayerEnemyCollision();
+        checkGameOver();
+        if (!player.isDead()) {
+            player.update(map);
+        }
+        for (Enemy enemy : enemies) {
+            if (!enemy.isDead()) {
+                enemy.update(map);
+            }
+            repaint();
+        }
     }
 
+    private void checkPlayerEnemyCollision() {
+        int px = player.getTileX();
+        int py = player.getTileY();
+
+        for (Enemy e : enemies) {
+            if (e.isDead()) continue;
+
+            if (e.getTileX() == px && e.getTileY() == py) {
+                player.die();
+                return;
+            }
+        }
+    }
+
+    private boolean gameOver = false;
+
+    private void checkGameOver() {
+        if (player.isDead() && !gameOver) {
+            gameOver = true;
+            frame.showMenu();
+        }
+    }
 }
