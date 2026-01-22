@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Bomb extends Entity{
-    private final SpriteSheet ss;
     private enum State { WAIT, EXPLODING }
     private State state = State.WAIT;
     private int timer= 180;
@@ -22,7 +21,7 @@ public class Bomb extends Entity{
         this.x = x;
         this.y = y;
         this.map = map;
-        ss = new SpriteSheet("bomb_party_v4.png");
+        SpriteSheet ss = new SpriteSheet("bomb_party_v4.png");
         boom  = ss.grabSprite(64, 288, 16, 16);
         fireCenter = ss.grabSprite(32, 288, 16, 16);
         fireUp     = ss.grabSprite(224, 211, 16, 16);

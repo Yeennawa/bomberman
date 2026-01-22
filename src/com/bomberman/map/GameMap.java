@@ -18,9 +18,9 @@ public class GameMap {
         mapData = new int[row][col];
 
         for (int y = 0; y < row; y++) {
+            int i=0;
             for (int x = 0; x < col; x++) {
-
-
+                int check=0;
                 if (x == 0 || y == 0 || x == col - 1 || y == row - 1) {
                     mapData[y][x] = 1; // wall
                 }
@@ -35,7 +35,13 @@ public class GameMap {
                     mapData[y][x] = 0;
                 }
                 else {
-                    mapData[y][x] = Math.random() < 0.7 ? 2 : 0;
+                    check = Math.random() < 0.7 ? 2 : 0;
+                    if(check==2 && i <4){
+                        mapData[y][x]=2;
+                        i++;
+                    }else {
+                        mapData[y][x]=0;
+                    }
                 }
             }
         }

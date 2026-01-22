@@ -1,10 +1,12 @@
 package com.bomberman.game;
 
+import com.bomberman.entity.ApiClient;
 import com.bomberman.entity.Bomb;
 import com.bomberman.entity.Enemy;
 import com.bomberman.entity.Player;
 import com.bomberman.map.GameMap;
-
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,14 +30,14 @@ public class GamePanel extends JPanel implements ActionListener {
     public GamePanel(GameFrame frame) {
         this.frame = frame;
         map = new GameMap();
-        Keylistener keyH = new Keylistener();
+        keyH = new Keylistener();
+        bombs = new ArrayList<>();
         player = new Player(
                 1 * TILE_SIZE,
                 1 * TILE_SIZE,
                 speed,
                 keyH
         );
-        ArrayList<Bomb> bombs = new ArrayList<>();
         enemies = new ArrayList<>();
         spawnEnemies(3);
 
@@ -86,6 +88,10 @@ public class GamePanel extends JPanel implements ActionListener {
         for (Bomb b : bombs) {
             b.draw(g2d);
         }
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 20));
+        g2d.drawString("Score: " + player.getScore(), 10, 25);
+
     }
 
     public void updateGame() {
@@ -108,6 +114,14 @@ public class GamePanel extends JPanel implements ActionListener {
                 bombs.remove(i);
             }
         }
+
+        for (Enemy enemy : enemies) {
+            if (enemy.isDead() && !enemy.isScoreGiven()) {
+                player.addScore(100);
+                enemy.markScoreGiven();
+            }
+        }
+
 
         if (keyH.up) {
             dy = -speed;
@@ -164,7 +178,9 @@ public class GamePanel extends JPanel implements ActionListener {
     private void checkGameOver() {
         if (player.isDead() && !gameOver) {
             gameOver = true;
+            String leaderboard = ApiClient.getLeaderboard();
             frame.showMenu();
         }
+
     }
 }

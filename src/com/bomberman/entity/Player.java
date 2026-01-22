@@ -3,10 +3,9 @@ package com.bomberman.entity;
 import com.bomberman.game.GamePanel;
 import com.bomberman.game.Keylistener;
 import com.bomberman.map.GameMap;
-
+import com.bomberman.entity.ApiClient;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Entity {
     private  Keylistener keyH;
@@ -14,11 +13,16 @@ public class Player extends Entity {
     private BufferedImage upImage, downImage, leftImage, rightImage;
     private BufferedImage currentImage;
     int width  = GamePanel.TILE_SIZE;
-    int height = GamePanel.TILE_SIZE;;
+    int height = GamePanel.TILE_SIZE;
+    private long playerId;
+
+    private int score = 0;
 
     public Player(int x, int y, int speed,Keylistener keyH) {
         super(x, y, speed);
         this.keyH=keyH;
+        this.playerId = ApiClient.createPlayer("Player1");
+
         ss = new SpriteSheet("bomb_party_v4.png");
 
         downImage  = ss.grabSprite(1, 272, 15, 15);
@@ -28,6 +32,15 @@ public class Player extends Entity {
 
         currentImage = ss.grabSprite(17, 272, 15, 15);
     }
+
+    public void addScore(int s) {
+        score += s;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
     public void draw(Graphics2D g2d) {
         if (currentImage != null) {
             g2d.drawImage(
@@ -128,7 +141,10 @@ public class Player extends Entity {
 
     public void die() {
         dead = true;
+
+        ApiClient.sendScore(playerId, score);
     }
+
 
     public boolean isDead() {
         return dead;

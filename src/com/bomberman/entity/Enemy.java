@@ -15,6 +15,8 @@ public class Enemy extends Entity{
     int height = GamePanel.TILE_SIZE;
     private int direction = 0;
     private int moveCounter = 0;
+    private boolean scoreGiven = false;
+
     ArrayList<Enemy> enemies;
     public Enemy(int x,int y ,int speed){
         super(x, y, speed);
@@ -120,6 +122,14 @@ public class Enemy extends Entity{
             }
         }
     }
+    public boolean isScoreGiven() {
+        return scoreGiven;
+    }
+
+    public void markScoreGiven() {
+        scoreGiven = true;
+    }
+
         private boolean dead = false;
 
         public void die() {

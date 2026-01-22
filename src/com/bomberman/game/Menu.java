@@ -35,16 +35,27 @@ public class Menu extends JPanel {
         return exitButton;
     }
 
-    private JLabel background(){
-        ImageIcon background = new ImageIcon("src/images/backfree.jpg");
-        JLabel lebel = new JLabel(background);
-        lebel.setLayout(null);
+    private JLabel background() {
+        java.net.URL imgURL = getClass().getResource("/images/backfree.jpg");
+        ImageIcon background;
+
+        if (imgURL != null) {
+            background = new ImageIcon(imgURL);
+        } else {
+            System.err.println("หาภาพพื้นหลังไม่เจอที่: /images/backfree.jpg");
+            background = new ImageIcon(); // สร้าง Object ว่างเพื่อไม่ให้โปรแกรม Crash
+        }
+
+        JLabel label = new JLabel(background);
+        label.setLayout(null);
+
         JButton start = startButton();
         start.setBounds(150, 350, 175, 40);
-        lebel.add(start);
+        label.add(start);
+
         JButton exit = exitButton();
-        exit.setBounds(150,400,175,40);
-        lebel.add(exit);
-        return lebel;
-    }
-}
+        exit.setBounds(150, 400, 175, 40);
+        label.add(exit);
+
+        return label;
+    }}

@@ -1,4 +1,4 @@
-package com.bomberman.entity; //
+package com.bomberman.entity;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -10,9 +10,16 @@ public class SpriteSheet {
 
     public SpriteSheet(String path) {
         try {
-            sheet = ImageIO.read(new File("src/images/" + path));
-        } catch (IOException e) {
-            System.out.println("หาไฟล์ภาพไม่เจอ! เช็ค Path อีกทีนะ");
+            // ใช้ getClass().getResourceAsStream() และใส่ / นำหน้า images
+            var is = getClass().getResourceAsStream("/images/" + path);
+
+            if (is == null) {
+                throw new RuntimeException("หาไฟล์ไม่เจอที่: /images/" + path);
+            }
+
+            sheet = ImageIO.read(is);
+        } catch (Exception e) {
+            System.err.println("โหลด sprite ไม่ได้: " + path);
             e.printStackTrace();
         }
     }
