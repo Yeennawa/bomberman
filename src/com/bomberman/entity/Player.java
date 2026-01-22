@@ -14,14 +14,14 @@ public class Player extends Entity {
     private BufferedImage currentImage;
     int width  = GamePanel.TILE_SIZE;
     int height = GamePanel.TILE_SIZE;
-    private long playerId;
-
+    private String name = "";
     private int score = 0;
 
-    public Player(int x, int y, int speed,Keylistener keyH) {
+    public Player(int x, int y, int speed,Keylistener keyH,String name) {
         super(x, y, speed);
         this.keyH=keyH;
-        this.playerId = ApiClient.createPlayer("Player1");
+        this.name = name;
+
 
         ss = new SpriteSheet("bomb_party_v4.png");
 
@@ -141,8 +141,6 @@ public class Player extends Entity {
 
     public void die() {
         dead = true;
-
-        ApiClient.sendScore(playerId, score);
     }
 
 

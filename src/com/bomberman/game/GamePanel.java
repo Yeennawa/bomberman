@@ -5,8 +5,6 @@ import com.bomberman.entity.Bomb;
 import com.bomberman.entity.Enemy;
 import com.bomberman.entity.Player;
 import com.bomberman.map.GameMap;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +15,9 @@ public class GamePanel extends JPanel implements ActionListener {
     private GameFrame frame;
     private int speed = 2;
     private int spriteIndex = 0;
+    private String playerName;
+    private boolean showLeaderboard = false;
+    private java.util.List<String[]> leaderboard = new java.util.ArrayList<>();
     Player player;
     Keylistener keyH;
     GameMap map;
@@ -32,11 +33,22 @@ public class GamePanel extends JPanel implements ActionListener {
         map = new GameMap();
         keyH = new Keylistener();
         bombs = new ArrayList<>();
+        playerName = JOptionPane.showInputDialog(
+                null,
+                "Enter your name",
+                "Bomberman",
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Player";
+        }
         player = new Player(
                 1 * TILE_SIZE,
                 1 * TILE_SIZE,
                 speed,
-                keyH
+                keyH,
+                playerName
         );
         enemies = new ArrayList<>();
         spawnEnemies(3);
@@ -91,6 +103,10 @@ public class GamePanel extends JPanel implements ActionListener {
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Arial", Font.BOLD, 20));
         g2d.drawString("Score: " + player.getScore(), 10, 25);
+
+        if (showLeaderboard) {
+            drawLeaderboard(g);
+        }
 
     }
 
@@ -178,9 +194,30 @@ public class GamePanel extends JPanel implements ActionListener {
     private void checkGameOver() {
         if (player.isDead() && !gameOver) {
             gameOver = true;
-            String leaderboard = ApiClient.getLeaderboard();
-            frame.showMenu();
-        }
 
+            ApiClient.sendScore(playerName, player.getScore());
+            leaderboard = ApiClient.getLeaderboard();
+            showLeaderboard = true;
+        }
     }
+
+    private void drawLeaderboard(Graphics g) {
+        g.setColor(new Color(0, 0, 0, 200));
+        g.fillRect(120, 80, 360, 320);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 22));
+        g.drawString("LEADERBOARD", 200, 120);
+
+        g.setFont(new Font("Arial", Font.PLAIN, 16));
+        int y = 160;
+        int rank = 1;
+
+        for (String[] row : leaderboard) {
+            g.drawString(rank + ". " + row[0] + "  :  " + row[1], 170, y);
+            y += 28;
+            rank++;
+        }
+    }
+
 }
